@@ -37,7 +37,7 @@ if __name__ == '__main__':
     with  tf.Session(config=tf_config) as sess:
         graph = tf.get_default_graph()
         inputs = graph.get_tensor_by_name('CmuHand/image:0')
-        out = graph.get_tensor_by_name('CmuHand/Openpose/out:0')
+        out = graph.get_tensor_by_name('CmuHand/Openpose/out/out:0')
         stage_5 = graph.get_tensor_by_name('CmuHand/Mconv7_stage5/BiasAdd:0')
         stage_4 = graph.get_tensor_by_name('CmuHand/Mconv7_stage4/BiasAdd:0')
         stage_3 = graph.get_tensor_by_name('CmuHand/Mconv7_stage3/BiasAdd:0')

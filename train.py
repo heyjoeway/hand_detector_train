@@ -1,3 +1,12 @@
+from numba.core.errors import NumbaWarning, NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+import warnings
+
+warnings.simplefilter('ignore', category=NumbaWarning)
+warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
+warnings.filterwarnings('ignore',category=FutureWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
 import argparse
 import logging
 import os
@@ -6,6 +15,7 @@ import time
 import cv2
 import numpy as np
 import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 from tqdm import tqdm
 
 from networks import get_network
@@ -27,7 +37,7 @@ logger.addHandler(ch)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Training codes for Openpose using Tensorflow')
     parser.add_argument('--datapath', type=str, default='../hand_labels_synth')
-    parser.add_argument('--batchsize', type=int, default=64)
+    parser.add_argument('--batchsize', type=int, default=32)
     parser.add_argument('--input-width', type=int, default=368)
     parser.add_argument('--input-height', type=int, default=368)
     parser.add_argument('--gpus', type=int, default=4)
@@ -201,7 +211,8 @@ if __name__ == '__main__':
                 if len(validation_cache) == 0:
                     for images_test, heatmaps in tqdm(df_valid.get_data()):
                         validation_cache.append((images_test, heatmaps))
-                    df_valid.reset_state()
+                    if not df_valid.ds._reset_done:
+                        df_valid.reset_state()
                     del df_valid
                     df_valid = None
 

@@ -25,7 +25,7 @@ Clone the repo and install 3rd-party libraries.
 ```bash
 $ git clone https://github.com/ortegatron/hand_detector_train.git
 $ cd hand_detector_train
-$ pip3 install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 Download openpose_vgg16.npy from http://www.mediafire.com/file/7e73ddj31rzw6qq/openpose_vgg16.npy and save into hand_detector_train/models/numpy. The VGG-16 first layers are taken from there to do the feature extraction.
@@ -74,7 +74,7 @@ While it may be tempting to convert those three files into a .pb file and use it
 First run:
 
 ```
-$ python3 run_chekpoint.py
+$ python run_chekpoint.py
 ```
 
 This will generate the graph and save it on tmp/graph_definition.pb.
@@ -82,10 +82,10 @@ This will generate the graph and save it on tmp/graph_definition.pb.
 Now we can freeze the graph with the saved checkpoint by doing:
 
 ```
-$ python3 -m tensorflow.python.tools.freeze_graph \
+$ python -m tensorflow.python.tools.freeze_graph \
 --input_graph=./tmp/graph_definition.pb \
 --input_checkpoint=./models/train/test/model_latest-XXXXX \
---output_graph=./models/frozengraph.pb --output_node_names="Openpose/out"
+--output_graph=./models/frozengraph.pb --output_node_names="Openpose/out/out"
 ```
 Where model_latest-XXXXX is the name for the saved checkpoint you want to use. This will freeze the graph with the same variable's value as the saved checkpoint, and save it on ./models/frozengraph.pb.
 
@@ -94,7 +94,7 @@ Where model_latest-XXXXX is the name for the saved checkpoint you want to use. T
 To test the trained detector:
 
 ```
-$ python3 test.py --graph-path=$GRAPH_PATH --image-path=$IMAGE_PATH
+$ python test.py --graph-path=$GRAPH_PATH --image-path=$IMAGE_PATH
 ```
 
 It will show the detected belief maps on top of the image.
